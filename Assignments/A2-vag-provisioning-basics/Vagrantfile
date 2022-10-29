@@ -1,0 +1,27 @@
+
+Vagrant.configure("2") do |config|
+    
+    config.vm.box = "bento/ubuntu-18.04"
+  
+
+    ## normally the provisioning runs once by default unless you configure that explicitly by adding run option.
+
+    #We gave the provisioner a name bootsrtap and type shell
+    # this provisioner will always run every time
+   config.vm.provision "bootstrap", type: "shell", inline: "echo Hello!", run: "always"
+   
+
+    ## here we add another vm and do provisiong this is an inner scope so it will run after the outer scope.
+    config.vm.define "web" do |web|
+        # use the file provisioner to upload files from host to guest
+        web.vm.provision "file", source: "./someFile", destination: "$HOME/someFile"
+        web.vm.provision "shell", inline: "echo I-am-the-inner-scope-machine"
+    end
+
+   #run another prvisioner using variable 
+   config.vm.provision "shell", run:"always" do |shell|
+    shell.inline = "echo I-am-another-provisioner"
+   end
+
+  end
+  
