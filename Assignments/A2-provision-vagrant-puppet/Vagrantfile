@@ -3,11 +3,11 @@ Vagrant.configure("2") do |config|
     config.vm.hostname = "test"
     config.vm.network "forwarded_port", guest: 80, host: 8082
 
-    config.vm.provision "pre-provision", type: "shell", inline: <<-SHELL 
-    sudo apt-get update
-    sudo apt-get install -y curl
-    curl -sl https://deb.nodesource.com/setup_12.x | sudo -E bash -
-    SHELL
+    # config.vm.provision "pre-provision", type: "shell", inline: <<-SHELL 
+    # sudo apt-get update
+    # sudo apt-get install -y curl
+    # curl -sl https://deb.nodesource.com/setup_12.x | sudo -E bash -
+    # SHELL
     ####### Install Puppet Agent #######
     config.vm.provision "shell", path: "./bootstrap.sh"
     ####### Provision #######
