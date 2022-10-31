@@ -10,17 +10,17 @@ node default {
 
 
 # update the file 
-#node default {
- # class { 'hello_web':
-  #  package_name => 'httpd',
-   # service_name => 'httpd',
-    #doc_root => '/var/www/html',
-  #}
-#}
+# node default {
+#  class { 'hello_web':
+#    package_name => 'httpd',
+#    service_name => 'httpd',
+#     doc_root => '/var/www/html',
+#   }
+# }
 
 
 
-## multi nodes 
+# # multi nodes 
 # node dk-ord-web* {
 #   class { 'hello_web':
 #     package_name => 'httpd',
