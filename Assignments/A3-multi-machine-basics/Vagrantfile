@@ -1,32 +1,27 @@
+
+
+nodes = [
+  { :hostname => 'appserver', :ip => '192.168.56.2'},
+  { :hostname => 'dbserver',  :ip => '192.168.56.3'},
+  { :hostname => 'web',       :ip => '192.168.56.4'},
+  { :hostname => 'tst0',      :ip => '192.168.56.5'},
+  { :hostname => 'tst1',      :ip => '192.168.56.6'},
+  { :hostname => 'tst2',      :ip => '192.168.56.7'}
+]
+
 Vagrant.configure("2") do |config|
-
-    
-    # the appserver 
-    config.vm.define "appserver" do |appserver|
-      appserver.vm.box = "bento/ubuntu-18.04"
-      ####### Install Puppet Agent #######
-      appserver.vm.provision "shell", path: "./bootstrap.sh"
-      #config.vm.network "forwarded_port", guest: 80, host: 8082
-      ####### Provision #######
-      appserver.vm.provision "puppet" do |puppet|
-        puppet.module_path = "./site"
-        puppet.options = "--verbose --debug"
-      end
+  nodes.each do |node|
+    config.vm.define node[:hostname] do |nodeconfig|
+      nodeconfig.vm.box = "bento/ubuntu-18.04"
+      nodeconfig.vm.hostname = node[:hostname]
+      nodeconfig.vm.network :private_network, ip: node[:ip]
     end
-
-    # the dbswerver 
-    config.vm.define "dbserver" do |dbserver|
-      dbserver.vm.box = "bento/ubuntu-18.04"
-      ####### Install Puppet Agent #######
-      dbserver.vm.provision "shell", path: "./bootstrap.sh"
-      #config.vm.network "forwarded_port", guest: 80, host: 8082
-      ####### Provision #######
-      dbserver.vm.provision "puppet" do |puppet|
-        puppet.module_path = "./site"
-        puppet.options = "--verbose --debug"
-      end
-    end
-
-
-    
+  end
+  ####### Install Puppet Agent #######
+  config.vm.provision "shell", path: "./bootstrap.sh"
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.manifest_file = "default.pp"
+    puppet.module_path = "puppet/modules"
+  end
 end
