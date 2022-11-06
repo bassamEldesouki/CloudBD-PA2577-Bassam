@@ -3,11 +3,10 @@
 nodes = [
   { :hostname => 'appserver', :ip => '192.168.56.2'},
   { :hostname => 'dbserver',  :ip => '192.168.56.3'},
-  { :hostname => 'web',       :ip => '192.168.56.4',  :g_port => '80',  :h_port => '8080'},
-  { :hostname => 'tst0',      :ip => '192.168.56.5'},
-  { :hostname => 'tst1',      :ip => '192.168.56.6'},
-  { :hostname => 'tst2',      :ip => '192.168.56.7'}
+  { :hostname => 'web',       :ip => '192.168.56.4',  :g_port => '80',  :h_port => '8080'}
 ]
+test_nodes = 2 # 0 based index --> means there will be 3 nodes starts from node 0 
+
 
 Vagrant.configure("2") do |config|
   nodes.each do |node|
@@ -20,6 +19,20 @@ Vagrant.configure("2") do |config|
       nodeconfig.vm.network :private_network, ip: node[:ip]
     end
   end
+
+  # build test nodes
+  (0..test_nodes).each do |i|
+    hostname = "tst#{i}"
+    node_ip = "192.168.56.#{i+5}"
+    config.vm.define hostname do |nodeconfig|
+      nodeconfig.vm.box = "bento/ubuntu-18.04"
+      nodeconfig.vm.hostname = hostname
+      nodeconfig.vm.network :private_network, ip: node_ip
+    end
+  end
+
+
+
   ####### Install Puppet Agent #######
   config.vm.provision "shell", path: "./bootstrap.sh"
   config.vm.provision :puppet do |puppet|
