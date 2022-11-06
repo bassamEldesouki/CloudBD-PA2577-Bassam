@@ -1,14 +1,33 @@
-class nginx (
-  $nginx_package = 'nginx',
-  $nginx_service = 'nginx'
-) {
-  package { $nginx_package:
-    ensure => present,
+# == Class: nginx
+#
+# Installs and configures Nginx.
+#
+class nginx {
+  package { 'nginx':
+    ensure => present;
   }
-  service { $nginx_service:
-    require => Package[$nginx_package],
-    enable  => true,
-    ensure => running,
+
+  service { 'nginx':
+    ensure  => running,
+    require => Package['nginx'];
+  }
+
+  file {
+    '/etc/nginx/nginx.conf':
+      ensure  => present,
+      source  => 'puppet:///modules/nginx/nginx.conf',
+      require => Package['nginx'],
+      notify  => Service['nginx'];
+
+    '/etc/nginx/proxy_params':
+      ensure  => present,
+      source  => 'puppet:///modules/nginx/proxy_params',
+      require => Package['nginx'],
+      notify  => Service['nginx'];
+
+    '/etc/nginx/sites-enabled/default':
+      ensure  => absent,
+      require => Package['nginx'],
+      notify  => Service['nginx'];
   }
 }
-
