@@ -1,0 +1,31 @@
+# There is an error when running vagrant up 
+# undefined method `old_compare' for nil:NilClass (NoMethodError)
+
+Vagrant.configure("2") do |config|
+  
+  config.vm.hostname = 'vagrant-test'
+
+  # virtualbox provider 
+  config.vm.provider "virtualbox" do |v|
+    config.vm.box = "bento/ubuntu-18.04"
+    config.vm.define "appserver"
+    config.vm.define "dbserver"
+  end
+
+  # digital_ocean provider
+  config.vm.provider :digital_ocean do |provider, override|
+    override.ssh.private_key_path = '~/.ssh/myvagrantkey'
+    override.vm.box = 'digital_ocean'
+    override.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+    override.vm.allowed_synced_folder_types = :rsync
+
+    provider.token = ENV['DTOKEN']  # export the token on terminal first
+    provider.image = 'ubuntu-18-04-x64'
+    provider.region = 'nyc1'
+    provider.size = 's-1vcpu-1gb'
+    provider.setup = false
+    config.vm.define "appserver"
+    config.vm.define "dbserver"
+  end
+
+end

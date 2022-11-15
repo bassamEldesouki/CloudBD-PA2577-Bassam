@@ -1,4 +1,5 @@
 
+# before vagrant plugin install vagrant-puppet-install
 # This part to solve error "undefined method `[]' for nil:NilClass (NoMethodError)"" when running with puppet provisioing
 class Hash
   def slice(*keep_keys)
