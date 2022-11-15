@@ -6,3 +6,6 @@
 #### 4- As a manager I want my developers to be able to test locally in a cheap way so that overall costs are kept down.
 #### 5- As a developer I want a scripted solution for setting up a new server so that I do not forget any important steps.
 #### 6- As a tester I want a scripted solution for setting up a test server to make sure that I have the same environment as the production servers.
+#### 7- As a developer I want to start all my machines with one command so that I don't forget any machines.
+#### 8- As a tester I want a scripted solution for setting up a test environment to make sure that I have the same environment as the production servers.
+#### 9- As owner of this company, I don't want to pay for buying, running, and maintaining a lot of servers that we may not need all the time.
